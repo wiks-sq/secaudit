@@ -1,0 +1,20 @@
+# Copy to ~/.config/secaudit/config.toml
+# Environment variables override these: NVD_API_KEY, OLLAMA_HOST,
+# SECAUDIT_OLLAMA_MODEL, SECAUDIT_HISTORY_DIR.
+
+# Where per-domain audit history is written (one JSON file per audit)
+# history_dir = "~/.local/share/secaudit/history"
+
+# API response cache (NVD/OSV/KEV/EPSS, 24h)
+# cache_dir = "~/.cache/secaudit"
+
+# Per-request timeout in seconds
+timeout = 15.0
+
+# Free key from https://nvd.nist.gov/developers/request-an-api-key
+# Raises the NVD limit from 5 to 50 requests / 30 s.
+# nvd_api_key = ""
+
+ollama_url = "http://localhost:11434"
+# Leave unset to auto-pick an installed instruction model
+# ollama_model = "qwen2.5:7b"
