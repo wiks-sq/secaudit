@@ -11,12 +11,50 @@ It never fuzzes, brute-forces, injects payloads or attempts exploitation.
 ## Install
 
 ```bash
+git clone https://github.com/wiks-sq/secaudit.git
+cd secaudit
 python3 -m venv .venv
 .venv/bin/pip install -e .
 .venv/bin/secaudit --help
 ```
 
 Requires Python ≥ 3.10. Dependencies: `click`, `rich`, `httpx`, `dnspython`, `cryptography`.
+
+## Running the commands
+
+The install creates two launchers inside the virtual environment: `.venv/bin/secaudit` and
+`.venv/bin/secdomains` (a shorthand for `secaudit domains`). They are not on your `PATH` yet, so pick one of
+these. The examples in the rest of this README use the plain names and assume option 2 or 3.
+
+1. **Call them by path**, from the project folder:
+
+   ```bash
+   .venv/bin/secaudit example.com
+   .venv/bin/secdomains example.com
+   ```
+
+2. **Activate the virtual environment**, which makes the plain names work in that terminal until you close it
+   or run `deactivate`:
+
+   ```bash
+   source .venv/bin/activate
+   secaudit example.com
+   ```
+
+3. **Symlink them into a folder on your `PATH`** (once, from the project folder), so they work from anywhere
+   without activating anything:
+
+   ```bash
+   mkdir -p ~/.local/bin
+   ln -s "$PWD/.venv/bin/secaudit" ~/.local/bin/secaudit
+   ln -s "$PWD/.venv/bin/secdomains" ~/.local/bin/secdomains
+   ```
+
+   If `secaudit` is still not found afterwards, `~/.local/bin` is not on your `PATH`: add
+   `export PATH="$HOME/.local/bin:$PATH"` to your shell profile.
+
+`python -m secaudit …` also works with the virtual environment's Python, e.g.
+`.venv/bin/python -m secaudit domains example.com`.
 
 ## Usage
 
@@ -37,6 +75,7 @@ secaudit history example.com --show -1    # re-render a stored audit (1 = oldest
 secaudit diff example.com                 # previous vs latest: new / fixed findings, tech & CVE changes
 secaudit analyze example.com              # run Ollama on a stored audit and save it into the history file
 secaudit domains example.com              # every hostname & related domain, and which ones resolve
+secdomains example.com                    # the same, as a standalone command
 secaudit models                           # list Ollama models
 secaudit config                           # effective config & paths
 ```
@@ -46,8 +85,8 @@ Useful audit flags: `--exposure-checks`, `--no-ct`, `--no-cve`, `--no-assets`,
 
 ## Domain discovery
 
-`secaudit domains example.com` lists every hostname it can find under a domain, checks each one in DNS and
-splits the result into **Resolving** and **Not resolving**.
+`secaudit domains example.com`, or the shorthand `secdomains example.com`, lists every hostname it can find
+under a domain, checks each one in DNS and splits the result into **Resolving** and **Not resolving**.
 
 - **Where names come from:** Certificate Transparency (crt.sh, certspotter), hackertarget, urlscan.io, the Wayback
   Machine index, the domain's own NS/MX/SPF records, and the certificates that live hosts present. Source results

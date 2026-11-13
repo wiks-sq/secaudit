@@ -1,6 +1,7 @@
 # secaudit cheatsheet
 
-Both commands work from any folder (symlinks in `~/.local/bin`).
+The plain command names below work once the virtual environment is activated or the launchers are symlinked
+into your `PATH`; see "Running the commands" in [README.md](README.md). Otherwise prefix them with `.venv/bin/`.
 Add `-h` to any command for its full help.
 
 ## Domain discovery: `secdomains`
