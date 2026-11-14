@@ -101,8 +101,12 @@ under a domain, checks each one in DNS and splits the result into **Resolving** 
   (OSC 8), so Ctrl+click (or click, depending on the terminal) opens any of them, not only `www.` names. IP
   addresses link to their ipinfo.io page. Use `--links` to force hyperlinks when piping (e.g. into `less -R`).
 
+Every run also writes two plain-text files, one hostname per line, into the directory you ran it from:
+`<domain>_resolved.txt` and `<domain>_unresolved.txt`. They are overwritten on the next run for the same domain;
+`--no-files` turns this off.
+
 Options: `--only resolved|unresolved`, `--no-probe` (DNS only, no TLS/HTTP requests to found hosts),
-`--bruteforce`, `--resolver 1.1.1.1`, `--refresh`, `--workers N`, `--json`, `-v` (where each name was found).
+`--bruteforce`, `--resolver 1.1.1.1`, `--refresh`, `--workers N`, `--json`, `--no-files`, `-v` (where each name was found).
 
 ## What it checks
 

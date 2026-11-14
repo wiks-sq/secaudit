@@ -47,7 +47,7 @@ _MULTI_SUFFIX = {"github.io", "herokuapp.com", "azurewebsites.net", "cloudfront.
                  "appspot.com", "myshopify.com", "wordpress.com"}
 
 WORDLIST = """www mail webmail smtp imap pop pop3 mx mx1 mx2 ns ns1 ns2 ns3 dns ftp sftp ssh vpn remote gateway gw
-proxy cdn static assets img images media files download downloads upload api api2 app apps m mobile web portal
+proxy cdn static assets img images media files download downloads upload api api2 app apps pwd mobile web portal
 intranet extranet internal admin administrator login auth sso id account accounts my secure pay payment payments
 billing shop store cart checkout blog news forum community help support docs doc wiki kb status monitor
 monitoring grafana kibana prometheus jenkins ci git gitlab jira confluence dev develop staging stage stg test

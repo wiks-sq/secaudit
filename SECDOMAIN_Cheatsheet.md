@@ -21,8 +21,19 @@ Add `-h` to any command for its full help.
 | `secdomains example.com --workers 60` | More parallel lookups (default 30) |
 | `secdomains example.com --timeout 8` | Per-request timeout in seconds (default 15) |
 | `secdomains example.com --json` | Print the result as JSON |
+| `secdomains example.com --no-files` | Don't write the two result files |
 | `secdomains example.com --links` | Force clickable links when piping |
 | `secdomains example.com --no-links` | Turn clickable links off |
+
+### Saved files
+
+Every run writes two files into the directory you ran it from, one hostname per line. They are overwritten on
+the next run for the same domain.
+
+| File | Contents |
+|---|---|
+| `example.com_resolved.txt` | Names that resolve |
+| `example.com_unresolved.txt` | Names that do not resolve |
 
 ### Recipes
 

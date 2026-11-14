@@ -371,7 +371,9 @@ def models_cmd(ollama_url):
 @click.option("-v", "--verbose", count=True, help="Show where each name was found, TXT records and all relations.")
 @click.option("--json", "as_json", is_flag=True, help="Print the result as JSON to stdout.")
 @click.option("--links/--no-links", default=None, help="Force clickable terminal hyperlinks on or off (default: on in a terminal).")
-def domains_cmd(domain, only, no_probe, bruteforce, resolvers, refresh, workers, timeout, verbose, as_json, links):
+@click.option("--no-files", is_flag=True, help="Don't write <domain>_resolved.txt and <domain>_unresolved.txt to the current directory.")
+def domains_cmd(domain, only, no_probe, bruteforce, resolvers, refresh, workers, timeout, verbose, as_json, links,
+                no_files):
     """Find every hostname and related domain for DOMAIN and check which ones resolve."""
     from secaudit import domains as dm
 
@@ -386,11 +388,29 @@ def domains_cmd(domain, only, no_probe, bruteforce, resolvers, refresh, workers,
         rep = dm.discover(name, cfg, probe=not no_probe, bruteforce=bruteforce, refresh=refresh,
                           nameservers=list(resolvers) or None, workers=workers,
                           progress=lambda msg: status.update(f"[bold]{name}[/] · {msg}"))
+    saved = [] if no_files else _save_domain_lists(rep)
     if as_json:
         click.echo(json.dumps(rep, indent=2))
-        return
-    out = console if links is None else Console(force_terminal=links)
-    dm.render(rep, out, only=only, verbose=verbose)
+    else:
+        dm.render(rep, console if links is None else Console(force_terminal=links), only=only, verbose=verbose)
+    for path, count in saved:
+        err_console.print(f"[dim]Saved {count} names to[/] ./{path.name}", highlight=False)
+
+
+def _save_domain_lists(rep: dict) -> list[tuple[Path, int]]:
+    """Write <domain>_resolved.txt and <domain>_unresolved.txt (one hostname per line) to the current directory."""
+    saved = []
+    for suffix, want in (("resolved", True), ("unresolved", False)):
+        names = [h["name"] for h in rep["hosts"] if h["resolves"] is want]
+        path = Path.cwd() / f"{rep['domain']}_{suffix}.txt"
+        try:
+            path.write_text("".join(n + "\n" for n in names))
+            saved.append((path, len(names)))
+        except OSError as e:
+            err_console.print(f"[bold red]Could not write {path}:[/] {e}")
+    return saved
+
+
 
 
 @main.command("config")
